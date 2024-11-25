@@ -21,38 +21,32 @@ Program to implement Linear and Polynomial Regression models for predicting car 
 Developed by: POOJASREE B
 RegisterNumber:  212223040148
 */
-# Program to implement Linear and Polynomial Regression models for predicting car prices.
-# Import Necessary Libraries
+# Import necessary libraries
+import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.metrics import mean_squared_error, r2_score
-import matplotlib.pyplot as plt
 
 # Load the dataset
-file_path = 'https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-ML240EN-SkillsNetwork/labs/data/CarPrice_Assignment.csv'
-df = pd.read_csv(file_path)
+data = pd.read_csv("https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-ML240EN-SkillsNetwork/labs/data/CarPrice_Assignment.csv")
 
-# Select relevant features and target variable
-X = df[['enginesize', 'horsepower', 'citympg', 'highwaympg']]  # Features
-y = df['price']  # Target variable
+# Select features and target variable
+X = data[['enginesize']]  # Predictor
+y = data['price']         # Target
 
-# Split the dataset
+# Split data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# 1. Linear Regression
+# Linear Regression
 linear_model = LinearRegression()
 linear_model.fit(X_train, y_train)
 y_pred_linear = linear_model.predict(X_test)
 
-# Evaluate Linear Regression
-print("Linear Regression:")
-print("Mean Squared Error:", mean_squared_error(y_test, y_pred_linear))
-print("R-squared:", r2_score(y_test, y_pred_linear))
-
-# 2. Polynomial Regression
-poly = PolynomialFeatures(degree=2)  # Change degree for higher-order polynomials
+# Polynomial Regression (degree = 2)
+poly = PolynomialFeatures(degree=2)
 X_train_poly = poly.fit_transform(X_train)
 X_test_poly = poly.transform(X_test)
 
@@ -60,34 +54,38 @@ poly_model = LinearRegression()
 poly_model.fit(X_train_poly, y_train)
 y_pred_poly = poly_model.predict(X_test_poly)
 
-# Evaluate Polynomial Regression
-print("\nPolynomial Regression:")
-print("Mean Squared Error:", mean_squared_error(y_test, y_pred_poly))
-print("R-squared:", r2_score(y_test, y_pred_poly))
+# Evaluate models
+print("Linear Regression MSE:", mean_squared_error(y_test, y_pred_linear))
+print("Linear Regression R^2 score:", r2_score(y_test, y_pred_linear))
+print("Polynomial Regression MSE:", mean_squared_error(y_test, y_pred_poly))
+print("Polynomial Regression R^2 score:", r2_score(y_test, y_pred_poly))
 
-# Visualize Results
-plt.figure(figsize=(10, 5))
+# Visualization: Linear Regression
+plt.scatter(X_test, y_test, color='red', label='Actual')
+plt.plot(X_test, y_pred_linear, color='blue', label='Linear')
+plt.title('Linear Regression')
+plt.xlabel('Engine Size')
+plt.ylabel('Price')
+plt.legend()
+plt.show()
 
-# Plot Linear Regression Predictions
-plt.scatter(y_test, y_pred_linear, label='Linear Regression', color='blue', alpha=0.6)
-
-# Plot Polynomial Regression Predictions
-plt.scatter(y_test, y_pred_poly, label='Polynomial Regression', color='green', alpha=0.6)
-
-plt.plot([y.min(), y.max()], [y.min(), y.max()], color='red', linestyle='--', linewidth=2)  # Ideal Line
-plt.title("Linear vs Polynomial Regression Predictions")
-plt.xlabel("Actual Prices")
-plt.ylabel("Predicted Prices")
+# Visualization: Polynomial Regression
+plt.scatter(X_test, y_test, color='red', label='Actual')
+plt.plot(X_test, y_pred_poly, color='green', label='Polynomial')
+plt.title('Polynomial Regression')
+plt.xlabel('Engine Size')
+plt.ylabel('Price')
 plt.legend()
 plt.show()
 
 ```
 
 ## Output:
-![image](https://github.com/user-attachments/assets/3afaa501-468d-4aeb-92aa-6165a9904005)
-![image](https://github.com/user-attachments/assets/37c952b4-88d8-4c14-a090-d87e69ac32c6)
+![image](https://github.com/user-attachments/assets/9619676a-8f31-41f6-956f-97762202bf7f)
 
+![image](https://github.com/user-attachments/assets/38ee892d-85e9-47f3-828a-b8763b8574ef)
 
+![image](https://github.com/user-attachments/assets/d901838b-baed-4db3-bd46-484ac7b52e69)
 
 
 ## Result:
